@@ -16,9 +16,14 @@ export const txVersion = TxVersion?.V0 ?? (TxVersion as any)
 
 const cluster = RPC_URL.includes('devnet') ? 'devnet' : 'mainnet'
 
-let raydium: Raydium | undefined
-export const initSdk = async (params?: { loadToken?: boolean }) => {
-  if (raydium) return raydium
+export let raydium!: Raydium
+export const getRaydium = (): Raydium => {
+  if (!raydium) throw new Error('raydium SDK not initialized - call initSdk() first')
+  return raydium
+}
+export type RaydiumType = Raydium
+export const initSdk = async (params?: { loadToken?: boolean }): Promise<Raydium> => {
+  if (raydium) return raydium!
   try {
     if (connection.rpcEndpoint === clusterApiUrl('mainnet-beta'))
       console.warn('using free rpc node might cause unexpected error, strongly suggest uses paid rpc node')
@@ -36,7 +41,7 @@ export const initSdk = async (params?: { loadToken?: boolean }) => {
     disableLoadToken: !params?.loadToken,
     blockhashCommitment: 'finalized',
   })
-  return raydium
+  return raydium!
 }
 
 export const fetchTokenAccountData = async () => {
