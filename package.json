@@ -24,7 +24,7 @@
     "npm-check-updates": "^16.14.11"
   },
   "scripts": {
-    "start": "node",
+  "start": "node server/index.js",
     "build": "tsc",
     "clean": "tsc --build --clean",
     "dev": "ts-node",
